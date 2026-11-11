@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dynamic-memory-plugin"
+version = "0.1.0"
+description = "Dynamic KV-cache resizing for vLLM"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+classifiers = ["Development Status :: 3 - Alpha"]
+requires-python = ">=3.11"
+dependencies = ["vllm>=0.32.0,<=0.33.0"]
+
+[project.optional-dependencies]
+runtime032 = ["vllm==0.32.0", "torch==2.13.0", "cuda-bindings==13.4.4"]
+runtime033 = ["vllm==0.33.0", "torch==2.14.0", "cuda-bindings==13.4.4"]
+
+[project.entry-points."vllm.general_plugins"]
+dynamic_memory = "dynamic_memory_plugin.plugin:register"
+
+[project.entry-points."vllm.endpoint_plugins"]
+dynamic_memory_api = "dynamic_memory_plugin.endpoints:DynamicMemoryEndpoints"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dynamic_memory_plugin = ["compatibility*.json"]
